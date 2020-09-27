@@ -4,9 +4,15 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+    [SerializeField]
     private const int V = 0;
     public float Velocidad = 1;
-
+    [SerializeField]
+    public GameObject _laser;
+    [SerializeField]
+    public GameObject disparo;
+    private float _canFire = 0.5f;
+    private float _fireRate = -1f;
 
     // Start is called before the first frame update
     void Start()
@@ -17,6 +23,13 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
+        if (Input.GetKeyDown(KeyCode.Space) && Time.time > _canFire)
+        {
+            _canFire = Time.time + _fireRate;
+            Instantiate(_laser, disparo.transform.position, Quaternion.identity);
+        }
+
         float h = Input.GetAxis("Horizontal");
         float v = Input.GetAxis("Vertical"); 
 
