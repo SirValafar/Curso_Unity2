@@ -15,6 +15,10 @@ public class Laser : MonoBehaviour
     void Update()
     {
         transform.Translate(Vector3.up * _speed * Time.deltaTime);
+        if (transform.parent != null)
+        {
+            Destroy(transform.parent.gameObject,1.5f);
+        }
         Destroy(this.gameObject, 1.5f);
     }
 }

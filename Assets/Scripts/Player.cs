@@ -10,31 +10,50 @@ public class Player : MonoBehaviour
     [SerializeField]
     public GameObject _laser;
     [SerializeField]
+    public GameObject _laserTriple;
+
+    [SerializeField]
     public GameObject disparo;
+
     private float _canFire = 0.5f;
     private float _fireRate = -1f;
 
     [SerializeField]
     private int _lives = 3;
 
+    private SpawnManager _spawnManager;
+    [SerializeField]
+
+    private bool _tripleShotActive = false;
+
     // Start is called before the first frame update
     void Start()
     {
         transform.position = new Vector3(0,0,0);
+        _spawnManager = GameObject.Find("Spawn Manager").GetComponent<SpawnManager>();
+
+        if (_spawnManager == null)
+        {
+            Debug.Log("The Spawn Manager is NULL");
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
-
+        Calcular();
         if (Input.GetKeyDown(KeyCode.Space) && Time.time > _canFire)
         {
-            _canFire = Time.time + _fireRate;
-            Instantiate(_laser, disparo.transform.position, Quaternion.identity);
+           FireLaser();
         }
+    }
 
+    void Calcular(){
         float h = Input.GetAxis("Horizontal");
         float v = Input.GetAxis("Vertical"); 
+
+
+
 
         if(transform.position.x <= 9 && transform.position.x >= -9 &&
         transform.position.y <= 6 && transform.position.y >= -4 ){
@@ -53,4 +72,26 @@ public class Player : MonoBehaviour
                 Destroy(this.gameObject);
             }
     }
+
+    void FireLaser(){
+        _canFire = Time.deltaTime + _fireRate;
+        if (_tripleShotActive == true)
+        {
+        Instantiate(_laserTriple, transform.position + new Vector3(0, 1.05f,0), Quaternion.identity);
+        }
+        else{
+        Instantiate(_laser, transform.position + new Vector3(0, 1.05f,0), Quaternion.identity);
+        }
+    }
+
+    public void TripleShotActive(){
+        _tripleShotActive = true;
+        StartCoroutine(TripleShotPower());
+    }
+
+    IEnumerator TripleShotPower(){
+        yield return new WaitForSeconds(5.0f);
+        _tripleShotActive = false;
+    }
+
 }
