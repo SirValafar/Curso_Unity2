@@ -12,11 +12,12 @@ public class SpawnManager : MonoBehaviour
     private GameObject _enemyContenedor;
     [SerializeField]
     private GameObject _PowerContenedor;
+    [SerializeField]
+    private GameObject[] powerUp;
     void Start()
     {
         StartCoroutine(SpawnRoutine());
         StartCoroutine(SpawnPowerUp());
-
     }
 
     void Update()
@@ -37,9 +38,11 @@ public class SpawnManager : MonoBehaviour
     IEnumerator SpawnPowerUp(){
         while(_stopSpawn == false)
         {
+            
         Vector3 posToSpawn = new Vector3(Random.Range(-8f, 8f), 7, 0);
         GameObject power = Instantiate(_PowerContenedor, posToSpawn, Quaternion.identity);
         power.transform.parent = _PowerContenedor.transform;
+
         yield return new WaitForSeconds(5.0f);
         }
     }
